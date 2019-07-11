@@ -265,5 +265,3 @@ def run():
         elif action_msg_chiose =='2':action_2()
 
 
-if __name__ == '__main__':
-    print(url_to_md_txt('https://www.cnblogs.com/jihongjun/p/8673315.html'))
