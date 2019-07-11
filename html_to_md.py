@@ -72,6 +72,6 @@ def url_to_md_txt(url):
         return False
 
 if __name__ == '__main__':
-    url = '请输入你的要爬取网页的的url\n:'
+    url = inport'请输入你的要爬取网页的的url\n:'
     print('内容如下')
     print(url_to_md_txt(url))
