@@ -3,7 +3,7 @@ import requests
 from lxml.html import etree
 import json
 import  os
-from bs4 import BeautifulSoup
+
 
 
 
@@ -86,23 +86,14 @@ def read_dic(url):
 def url_to_md_txt(url):
     try:
         response = requests.get(url)
-        response_dome = BeautifulSoup(response.text, 'html.parser')
-        response_dome_str = str(response_dome.div)
-        data = re.findall('<div class="postBody">(.*?)</div><div id="MySignature"></div>', response_dome_str, re.S)
-        a = data[0]
-
-
+        a = re.findall('<div id="cnblogs_post_body" class="blogpost-body cnblogs-markdown">(.*?)</div><div id="MySignature"></div>',response.text, re.S)[0]
         a = re.sub('<h1.*?>', '# ', a)
         a = re.sub('<h2.*?>', '## ', a)
         a = re.sub('<h3.*?>', '### ', a)
         a = re.sub('<h4.*?>', '#### ', a)
         a = re.sub('<h5.*?>', '##### ', a)
         a = re.sub('<h6.*?>', '###### ', a)
-
-
         a = re.sub('<strong>|</strong>', '**', a)
-
-
         if '<pre class=' in a:
             a = re.sub('<pre class="', '```', a)
             a = re.sub('"><code>', '\n', a)
@@ -111,27 +102,16 @@ def url_to_md_txt(url):
         a = re.sub('<code>|</code>', '```', a)
         a = re.sub('<div class="cnblogs_code".*?>', '```python', a)
         a = re.sub('</div>', '```', a)
-
         a = re.sub('<li>', '- ', a)
-
-
         a = re.sub('<em>|</em>', ' ', a)
-
-
-
         a = re.sub('<td.*?>|</td>\n', '|', a)
         a = re.sub('<th.*?>|</th>\n', '|', a)
         a = re.sub('<tr.*?>|</tr>\n', '', a)
         a = re.sub('</tbody>|</table>|<table>|<tbody>', '', a)
         a = re.sub('\|\|', '|', a)
-
-
-
-        a = re.sub('<p.*?>', '', a)
-              
+        a = re.sub('&quot;', '"', a)
+        a = re.sub('&#39;', "'", a)
         a = re.sub('<br/>', '\n', a)
-
-
         a = re.sub('<p.*?>', '', a)
         a = re.sub('<span.*?>', '', a)
         # a = re.sub('</.*?>', '', a) 这个先不去掉,为了后面表格时候弄
@@ -142,22 +122,12 @@ def url_to_md_txt(url):
         a = re.sub('<em id="__mceDel">', '', a)
         a = re.sub('<a.*?>', '', a)
         a = re.sub('<em id="__mceDel">', '', a)
-
-
-
         a = re.sub('&gt', '>', a)
-
-
         lis_a = a.split('\n')
-
-
-
         text = ''
         for data in lis_a:
             if not data:
                 continue
-
-
             if data == '|':
                 data = '\n'
             if '</thead>' in data:
@@ -166,22 +136,18 @@ def url_to_md_txt(url):
                 lis_format = '|:-:' * lis_x_count
                 data = f'{data_txt}\n{lis_format}|'
             text += f'{data}\n'
-
-
         text = re.sub('</.*?>', '', text)
-
         lis = text.split('\n')
         for index in range(len(lis)):
             if 'href=' in lis[index]:
                 lis[index] = f'{lis[index]}</a>'
-
-
         new_text = ''
         for aaaa in lis:
+            aaaa = re.sub('&lt;', "<", aaaa)
             new_text += f'{aaaa}\n'
 
 
-
+        #上面全是转md
         return new_text
 
     #可能博客不一样会存在见状性没有用我匹配的格式找到内容
