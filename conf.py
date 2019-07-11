@@ -91,7 +91,7 @@ def url_to_md_txt(url):
         data = re.findall('<div class="postBody">(.*?)</div><div id="MySignature"></div>', response_dome_str, re.S)
         a = data[0]
 
-        # 标题
+
         a = re.sub('<h1.*?>', '# ', a)
         a = re.sub('<h2.*?>', '## ', a)
         a = re.sub('<h3.*?>', '### ', a)
@@ -99,10 +99,10 @@ def url_to_md_txt(url):
         a = re.sub('<h5.*?>', '##### ', a)
         a = re.sub('<h6.*?>', '###### ', a)
 
-        # 加粗
+
         a = re.sub('<strong>|</strong>', '**', a)
 
-        # 三个点
+
         if '<pre class=' in a:
             a = re.sub('<pre class="', '```', a)
             a = re.sub('"><code>', '\n', a)
@@ -112,13 +112,12 @@ def url_to_md_txt(url):
         a = re.sub('<div class="cnblogs_code".*?>', '```python', a)
         a = re.sub('</div>', '```', a)
 
-        # - 这个标识
         a = re.sub('<li>', '- ', a)
 
-        # 空格
+
         a = re.sub('<em>|</em>', ' ', a)
 
-        # 表格
+
 
         a = re.sub('<td.*?>|</td>\n', '|', a)
         a = re.sub('<th.*?>|</th>\n', '|', a)
@@ -127,11 +126,12 @@ def url_to_md_txt(url):
         a = re.sub('\|\|', '|', a)
 
 
-        #换行
+
         a = re.sub('<p.*?>', '', a)
+              
         a = re.sub('<br/>', '\n', a)
 
-        # 没用的标识
+
         a = re.sub('<p.*?>', '', a)
         a = re.sub('<span.*?>', '', a)
         # a = re.sub('</.*?>', '', a) 这个先不去掉,为了后面表格时候弄
@@ -144,20 +144,20 @@ def url_to_md_txt(url):
         a = re.sub('<em id="__mceDel">', '', a)
 
 
-        #算法里面箭头
+
         a = re.sub('&gt', '>', a)
 
-        # 加超链接
+
         lis_a = a.split('\n')
 
 
-        # 字符串
+
         text = ''
         for data in lis_a:
             if not data:
                 continue
 
-            # 处理表格
+
             if data == '|':
                 data = '\n'
             if '</thead>' in data:
@@ -167,21 +167,21 @@ def url_to_md_txt(url):
                 data = f'{data_txt}\n{lis_format}|'
             text += f'{data}\n'
 
-        # 删除标签末尾
+
         text = re.sub('</.*?>', '', text)
-        #加超链接末尾
+
         lis = text.split('\n')
         for index in range(len(lis)):
             if 'href=' in lis[index]:
                 lis[index] = f'{lis[index]}</a>'
 
-        #变回字符串
+
         new_text = ''
         for aaaa in lis:
             new_text += f'{aaaa}\n'
 
 
-        #上面全是转md
+
         return new_text
 
     #可能博客不一样会存在见状性没有用我匹配的格式找到内容
