@@ -65,6 +65,6 @@ The program is only intended to help with learning
 
 Author name :a568972484
 
-Author's blog: little salted fish ywy
+Author's blog: 小小咸鱼ywy
 
 Blog link ` ` at https://www.cnblogs.com/pythonywy
