@@ -104,65 +104,65 @@ def url_to_md_txt(url):
             response_dome_str = str(response_dome.div)
             a = re.findall('<div class="postBody">(.*?)</div><div id="MySignature"></div>', response_dome_str, re.S)
         a = a[0]
+        # 标题
+        a = re.sub('<h1>.*?\d*\. (?P<name>.*?)</h1>', '<h1>\g<name>\n\n</h1>', a)
         a = re.sub('<h1.*?>', '# ', a)
+        a = re.sub('<h2>.*?\d*\.\d* (?P<name>.*?)</h2>', '<h2>\g<name>\n\n</h2>', a)
         a = re.sub('<h2.*?>', '## ', a)
+        a = re.sub('<h3>.*?\d*\.\d*\.\d* (?P<name>.*?)</h3>', '<h3>\g<name>\n\n</h3>', a)
         a = re.sub('<h3.*?>', '### ', a)
+        a = re.sub('<h4>.*?\d*\.\d*\.\d*\.\d* (?P<name>.*?)</h4>', '<h4>\g<name>\n\n</h4>', a)
         a = re.sub('<h4.*?>', '#### ', a)
+        a = re.sub('<h5>.*?\d*\.\d*\.\d*\.\d*\.\d* (?P<name>.*?)</h5>', '<h5>\g<name>\n\n</h5>', a)
         a = re.sub('<h5.*?>', '##### ', a)
+        a = re.sub('<h6>.*?\d*\.\d*\.\d*\.\d*\.\d*\.\d* (?P<name>.*?)</h6>', '<h6>\g<name>\n\n</h6>', a)
         a = re.sub('<h6.*?>', '###### ', a)
-        a = re.sub('<strong>|</strong>', '**', a)
+        a = re.sub('</h1>|</h2>|</h3>|</h4>|</h5>|</h6>|', "", a)
+
+        # 三个点
         if '<pre class=' in a:
             a = re.sub('<pre class="', '```', a)
             a = re.sub('"><code>', '\n', a)
         if '</code></pre>' in a:
             a = re.sub('</code></pre>', '\n```', a)
-        a = re.sub('<code>|</code>', '```', a)
+        a = re.sub('<code.*?>|</code>', '```', a)
         a = re.sub('<div class="cnblogs_code".*?>', '```python', a)
         a = re.sub('</div>', '```', a)
-        a = re.sub('<li>', '- ', a)
-        a = re.sub('<em>|</em>', ' ', a)
-        a = re.sub('<td.*?>|</td>\n', '|', a)
-        a = re.sub('<th.*?>|</th>\n', '|', a)
-        a = re.sub('<tr.*?>|</tr>\n', '', a)
-        a = re.sub('</tbody>|</table>|<table>|<tbody>', '', a)
-        a = re.sub('\|\|', '|', a)
-        a = re.sub('&quot;', '"', a)
-        a = re.sub('&#39;', "'", a)
-        a = re.sub('<br/>', '\n', a)
-        a = re.sub('<p.*?>', '', a)
-        a = re.sub('<span.*?>', '', a)
-        # a = re.sub('</.*?>', '', a) 这个先不去掉,为了后面表格时候弄
-        a = re.sub('<pre>', '', a)
-        a = re.sub('<ul>', '', a)
-        a = re.sub('<ol>', '', a)
+
+        # 标签
+        # 去掉开头的div标签
         a = re.sub('<div.*?>', '', a)
-        a = re.sub('<em id="__mceDel">', '', a)
-        # a = re.sub('<a.*?>', '', a)
-        a = re.sub('<em id="__mceDel">', '', a)
+
+        # em标签
+        a = re.sub('<em.*?>|</em>', ' ', a)
+
+        # strong标签加粗
+        a = re.sub('<strong>|</strong>', '**', a)
+
+        # span标签
+        a = re.sub('<span.*?>|</span>', '', a)
+
+        # pre标签
+        a = re.sub('<pre.*?>|</pre>', '', a)
+
+        # p标签
+        a = re.sub('<p.*?>|</p>', '', a)
+
+        # br标签
+        a = re.sub('<br/>', '\n', a)
+
+        # 里面内容特殊变化
+        # 双引号
+        a = re.sub('&quot;', '"', a)
+        # 单引号
+        a = re.sub('&#39;', "'", a)
+        # >符号
         a = re.sub('&gt', '>', a)
-        lis_a = a.split('\n')
-        text = ''
-        for data in lis_a:
-            if not data:
-                continue
-            if data == '|':
-                data = '\n'
-            if '</thead>' in data:
-                lis_x_count = data.count('|') - 1
-                data_txt = data[:-8]
-                lis_format = '|:-:' * lis_x_count
-                data = f'{data_txt}\n{lis_format}|'
-            text += f'{data}\n'
-        text = re.sub('</.*?>', '', text)
-        lis = text.split('\n')
-        for index in range(len(lis)):
-            if 'href=' in lis[index]:
-                lis[index] = f'{lis[index]}</a>'
-        new_text = ''
-        for aaaa in lis:
-            aaaa = re.sub('&lt;', "<", aaaa)
-            new_text += f'{aaaa}\n'
-        return new_text
+        # 符号
+        a = re.sub('&lt', '<', a)
+
+        # 上面全是转md
+        return a
 
     #可能博客不一样会存在见状性没有用我匹配的格式找到内容
     except :
