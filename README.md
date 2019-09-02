@@ -8,6 +8,8 @@
 
 ## 功能介绍
 
+目前版本`6.1`,可视化界面还没更新,运行`Crawl_blog_post_6.1`即可
+
 - 功能一：批量爬取博客园首页的所有随笔字典并保存JSON文件，且随笔全部转成MD格式文件
 - 功能二：输入指定随笔网址把随笔内容转成MD并且保存
 - 功能三：爬取某个分目录下博客
@@ -45,7 +47,7 @@
 
 核心代码在'core_code.py'中注释都加全了
 
-2019.8.21
+`2019.8.21`
 
 增加了功能
 
@@ -56,6 +58,16 @@ exe文件没有更新,更新了核心文件
 修复了:无法获取博客内容
 
 md文本内容匹配更加规范,内容更加完善
+
+`2019.9.2`
+
+版本更新至6.1
+
+- 修正了匹配规则
+- 修正了li与ul标签
+- 修正了```格式
+- 修正了最后一行会出现宫格
+- 我将可视化界面代码全部展示了,但是版本还是5.版本的
 
 # 再次强调
 
@@ -75,76 +87,4 @@ github_url:https://github.com/a568972484
 
 `希望得到大家相关体验,好进行后续的改进,谢谢`
 
-# Function introduction
 
-- function 1: batch access to all the essay dictionaries on the homepage of blog garden and save JSON files, and convert all the essays into MD format files
--  function 2: input the specified essay website to convert the essay content to MD and save it
-- function three: crawl a subdirectory blog
-
-- function 4: crawl all blogs under categories according to categories, add hexo to the content, including title, date, convenient for personal blog construction
-
-Since different blogs have different perspectives, you can use this program to make the appropriate changes according to the blog
-
-The program does not add 'multi - process' and 'multi - threaded' to increase the burden of the blog park
-
-Crawl content 'please do not use it for commercial purposes'
-
-The original intention is to help bloggers download the uploaded essays to the local site for easy modification
-
-# update log
-
-```
- 2019.7.20 
-```
-
-Added functionality
-
-Function description: crawl a subdirectory under the blog
-
-Version 5.0, added visual interface visual interface exe program, increased visibility,
-
-Just download exe to run
-
-Tips:
-
-Program by may be rogue antivirus software shield please restore
-
-Absolutely non-toxic, without adding any malicious information
-
-The first function and the third function of running the program will appear because of the number of blog card, because I understand the program is not deep did not find a solution, please forgive me please do not close the program, the end will automatically appear data
-
-Some modules are self-taught may not understand a little bit in place, please forgive me, need the original code to extract password private chat on me.
-
-The core code is commented out in 'core_code.py'
-
-2019.8.21
-
-Added functionality
-
-Features: according to the classification of the classification to crawl all blogs, add hexo content transfer content including titles, dates, easy to build personal blogs
-
-The exe file was not updated. The core file was updated
-
-Fixed: unable to access blog content
-
-Md text content matching more standard, more perfect content
-
-# again
-
-The program is only intended to help with learning
-
-
-
-Code cloud name :YWY
-
-Yards cloud link: https://gitee.com/pythonyw
-
-Github_id: a568972484
-
-github_url:https://github.com/a568972484
-
-Author's blog: little salted fish ywy
-
-Blog links: ` https://www.cnblogs.com/pythonywy
-
-'hope to get relevant experience, good for subsequent improvement, thank you'
