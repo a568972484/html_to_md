@@ -218,7 +218,6 @@ def url_to_md_txt(url):
 
     # 可能博客不一样会存在见状性没有用我匹配的格式找到内容
     except:
-        print('on')
         return False
 
 # 输入随笔的url转hexo支持解析的md格式文件添加标题

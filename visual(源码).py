@@ -119,14 +119,25 @@ def url_to_md_txt(url):
     try:
         url = f'https://www.cnblogs.com/{url}'
         response = requests.get(url)
+        # print(response.text)
         a = re.findall(
-            '<div id="cnblogs_post_body" class="blogpost-body cnblogs-markdown">(.*?)</div><div id="MySignature"></div>',
+            '<div id="cnblogs_post_body" class="blogpost-body.*?">(.*?)<div id="MySignature"></div>',
             response.text, re.S)
         if not a:
             response_dome = BeautifulSoup(response.text, 'html.parser')
             response_dome_str = str(response_dome.div)
-            a = re.findall('<div class="postBody">(.*?)</div><div id="MySignature"></div>', response_dome_str, re.S)
+            a = re.findall('<div class="postBody">(.*?)<div id="MySignature"></div>', response_dome_str, re.S)
         a = a[0]
+
+        #去除a头尾的空格
+        a = a.strip()
+
+        #去除末尾的div
+        a = a[:-6]
+
+        #再去除一次宫格
+        a = a.strip()
+
         # 标题
         a = re.sub('<h1>.*?\d*\. (?P<name>.*?)</h1>', '<h1>\g<name>\n\n</h1>', a)
         a = re.sub('<h1.*?>', '# ', a)
@@ -141,16 +152,24 @@ def url_to_md_txt(url):
         a = re.sub('<h6>.*?\d*\.\d*\.\d*\.\d*\.\d*\.\d* (?P<name>.*?)</h6>', '<h6>\g<name>\n\n</h6>', a)
         a = re.sub('<h6.*?>', '###### ', a)
         a = re.sub('</h1>|</h2>|</h3>|</h4>|</h5>|</h6>|', "", a)
+        # print(a)
+
 
         # 三个点
         if '<pre class=' in a:
             a = re.sub('<pre class="', '```', a)
             a = re.sub('"><code>', '\n', a)
-        if '</code></pre>' in a:
-            a = re.sub('</code></pre>', '\n```', a)
-        a = re.sub('<code.*?>|</code>', '```', a)
+        a = re.sub('<pre><code.*?>','```\n',a)
+        a = re.sub('</code></pre>', '\n```', a)
+
+        #另外一个写法的a
         a = re.sub('<div class="cnblogs_code".*?>', '```python', a)
         a = re.sub('</div>', '```', a)
+
+        #一个点
+        a = re.sub('<code.*?>|</code>', '`', a)
+
+
 
         # 标签
         # 去掉开头的div标签
@@ -183,6 +202,16 @@ def url_to_md_txt(url):
         a = re.sub('&gt', '>', a)
         # 符号
         a = re.sub('&lt', '<', a)
+
+        #ul与li
+        a = re.sub('<ul.*?>|</ul>|</li>','',a)
+        a = re.sub('<li.*?>','- ',a)
+
+        #html标签修正
+        print(a)
+        a = re.sub('<;', '<', a)
+        a = re.sub('>;', '>', a)
+        a = re.sub(';/', '/', a)
 
         # 上面全是转md
         return a
