@@ -27,7 +27,7 @@ def count_url_lis_to_dict(func_1):
                 print(f'\033[32;m已经获取标题为{name},url为{url}\033[0m')
             except:
                 try:
-                    name_xpath='//*[@id="topics"]/div/h1/text()[0]'
+                    name_xpath='//*[@id="topics"]/div/h1/a/text()'
                     response = requests.get(url)
                     response = response.text
                     response_html = etree.HTML(response)
@@ -208,7 +208,6 @@ def url_to_md_txt(url):
         a = re.sub('<li.*?>','- ',a)
 
         #html标签修正
-        print(a)
         a = re.sub('<;', '<', a)
         a = re.sub('>;', '>', a)
         a = re.sub(';/', '/', a)
