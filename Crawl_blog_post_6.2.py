@@ -199,9 +199,9 @@ def url_to_md_txt(url):
         # 单引号
         a = re.sub('&#39;', "'", a)
         # >符号
-        a = re.sub('&gt', '>', a)
+        a = re.sub('&gt;|&gt', '>', a)
         # 符号
-        a = re.sub('&lt', '<', a)
+        a = re.sub('&lt;|&lt', '<', a)
 
         #ul与li
         a = re.sub('<ul.*?>|</ul>|</li>','',a)
