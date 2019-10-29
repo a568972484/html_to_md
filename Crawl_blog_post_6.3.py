@@ -341,8 +341,13 @@ def text_to_file(name, text,files_name='博客园随笔md格式'):
     # 创建文件夹
     if not os.path.exists(files_name): os.mkdir(files_name)
 
+    #修正由于文件名称导致的文件保存失败
+    name=name.replace('/','-')
+    name=name.replace('\\', '-')
+
     # 创建文件路径
     file_path = os.path.join(files_name, f'{name}.md')
+
 
     # 保存
     try:
