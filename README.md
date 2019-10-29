@@ -31,6 +31,14 @@
 
 初衷`主要是为了帮助博主把已上传的随笔下载至本地方便修改`
 
+## 使用说明
+
+![](https://images.cnblogs.com/cnblogs_com/pythonywy/1516412/o_%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20191029202056.png)
+
+![](https://images.cnblogs.com/cnblogs_com/pythonywy/1516412/o_%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20191029202157.png)
+
+![](https://images.cnblogs.com/cnblogs_com/pythonywy/1516412/o_%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20191029202245.png)
+
 # 更新日志
 
 `2019.7.20`
