@@ -16,7 +16,7 @@ def count_url_lis_to_dict(func_1):
         count = lis[0]
         url_lis = lis[1]
         dic['count'] = count
-        name_xpath = '//*[@id="cb_post_title_url"]/text()'
+        name_xpath = '//title/text()'
         for url in url_lis:
             try:
                 response = requests.get(url)
