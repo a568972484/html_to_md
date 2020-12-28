@@ -400,8 +400,8 @@ def action_1():
 # 功能二
 def action_2():
     print('\033[31;m输入url\n'
-          '例如https://www.cnblogs.com/pythonywy/p/11123051.html\n'
-          '你只要输入pythonywy/p/11146937.html即可\n')
+          '例如https://www.cnblogs.com/pythonywy/p/10862343.html\n'
+          '你只要输入pythonywy/p/10862343.html即可\n')
     url = input('请输入\033[0m')
     name = input('请输入,你要保存的md文件的文件名称')
     try:
@@ -413,8 +413,8 @@ def action_2():
 def action_3():
     """按照分类爬取分类下所有博客"""
     print('\033[31;m输入博客园首页的格式为\n'
-          '例如 https://www.cnblogs.com/nickchen121/category/1379216.html \n'
-          '你只要输入 nickchen121/category/1379216.html 即可\n'
+          '例如 https://www.cnblogs.com/pythonywy/category/1463161.html \n'
+          '你只要输入 pythonywy/category/1463161.html 即可\n'
           '')
     url = input('请输入\033[0m')
 

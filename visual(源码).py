@@ -23,7 +23,7 @@ def count_url_lis_to_dict(func_1):
         count = lis[0]
         url_lis = lis[1]
         dic['count'] = count
-        name_xpath = '//*[@id="cb_post_title_url"]/text()'
+        name_xpath = '//title/text()'
         for url in url_lis:
             try:
                 response = requests.get(url)
@@ -33,8 +33,17 @@ def count_url_lis_to_dict(func_1):
                 dic[name] = url
                 show_windos(f'已经获取标题为{name},url为{url}')
             except:
-                show_windos(f'链接{url}获取随笔失败')
-                continue
+                try:
+                    name_xpath='//*[@id="topics"]/div/h1/a/text()'
+                    response = requests.get(url)
+                    response = response.text
+                    response_html = etree.HTML(response)
+                    name = response_html.xpath(name_xpath)[0]
+                    dic[name] = url
+                    show_windos(f'已经获取标题为{name},url为{url}')
+                except:
+                    show_windos(f'链接{url}获取随笔失败')
+                    continue
         show_windos('全部读取完毕')
         show_windos(f'随笔总数{dic["count"]}')
         show_windos(f'保存的json文件中的内容{dic}')
@@ -83,9 +92,9 @@ def get_category_url_lis(url_):
 def dump_json(dict, url):
     file_name = url.split('/')[-2]
 
-    if not os.path.exists('博客园随笔'): os.mkdir('博客园随笔')  # 创建个放随笔的文件夹
+    if not os.path.exists('博客园随笔统计json'): os.mkdir('博客园随笔统计json')  # 创建个放随笔的文件夹
 
-    file_path = os.path.join('博客园随笔', f'{file_name}.json')
+    file_path = os.path.join('博客园随笔统计json', f'{file_name}.json')
     with open(file_path, 'w', encoding='utf8') as fw:
         json.dump(dict, fw)
         show_windos('字典保存json文件成功')
@@ -94,7 +103,7 @@ def dump_json(dict, url):
 # 读取字典且保存去除字典中count 这一栏
 def read_dic(url):
     file_name = url.split('/')[-2]
-    file_path = os.path.join('博客园随笔', f'{file_name}.json')
+    file_path = os.path.join('博客园随笔统计json', f'{file_name}.json')
     try:
         with open(file_path, 'r', encoding='utf8') as fr:
             dic = json.load(fr)
@@ -129,13 +138,13 @@ def url_to_md_txt(url):
             a = re.findall('<div class="postBody">(.*?)<div id="MySignature"></div>', response_dome_str, re.S)
         a = a[0]
 
-        #去除a头尾的空格
+        # 去除a头尾的空格
         a = a.strip()
 
-        #去除末尾的div
+        # 去除末尾的div
         a = a[:-6]
 
-        #再去除一次宫格
+        # 再去除一次宫格
         a = a.strip()
 
         # 标题
@@ -154,22 +163,19 @@ def url_to_md_txt(url):
         a = re.sub('</h1>|</h2>|</h3>|</h4>|</h5>|</h6>|', "", a)
         # print(a)
 
-
         # 三个点
         if '<pre class=' in a:
             a = re.sub('<pre class="', '```', a)
             a = re.sub('"><code>', '\n', a)
-        a = re.sub('<pre><code.*?>','```\n',a)
+        a = re.sub('<pre><code.*?>', '```\n', a)
         a = re.sub('</code></pre>', '\n```', a)
 
-        #另外一个写法的a
+        # 另外一个写法的a
         a = re.sub('<div class="cnblogs_code".*?>', '```python', a)
         a = re.sub('</div>', '```', a)
 
-        #一个点
+        # 一个点
         a = re.sub('<code.*?>|</code>', '`', a)
-
-
 
         # 标签
         # 去掉开头的div标签
@@ -199,16 +205,15 @@ def url_to_md_txt(url):
         # 单引号
         a = re.sub('&#39;', "'", a)
         # >符号
-        a = re.sub('&gt', '>', a)
+        a = re.sub('&gt;|&gt', '>', a)
         # 符号
-        a = re.sub('&lt', '<', a)
+        a = re.sub('&lt;|&lt', '<', a)
 
-        #ul与li
-        a = re.sub('<ul.*?>|</ul>|</li>','',a)
-        a = re.sub('<li.*?>','- ',a)
+        # ul与li
+        a = re.sub('<ul.*?>|</ul>|</li>', '', a)
+        a = re.sub('<li.*?>', '- ', a)
 
-        #html标签修正
-        print(a)
+        # html标签修正
         a = re.sub('<;', '<', a)
         a = re.sub('>;', '>', a)
         a = re.sub(';/', '/', a)
@@ -216,7 +221,7 @@ def url_to_md_txt(url):
         # 上面全是转md
         return a
 
-    # 可能博客不一样会存在见状性没有用我匹配的格式找到内容
+        # 可能博客不一样会存在见状性没有用我匹配的格式找到内容
     except:
         return False
 
@@ -224,10 +229,10 @@ def url_to_md_txt(url):
 # 保存文档
 def text_to_file(name, text):
     # 创建文件夹
-    if not os.path.exists('博客园随笔md格式'): os.mkdir('博客园随笔md格式')
+    if not os.path.exists('博客园随笔markdown格式'): os.mkdir('博客园随笔markdown格式')
 
     # 创建文件路径
-    file_path = os.path.join('博客园随笔md格式', f'{name}.md')
+    file_path = os.path.join('博客园随笔markdown格式', f'{name}.md')
 
     # 保存
     try:
@@ -253,15 +258,18 @@ def show_windos(*args, start_index='ywy'):
 
 
 # 功能选择输入框标题
-count_1 = Label(root, text='批量爬取博客园首页的所有随笔字典并保存json文件,且随笔全部转成md格式文件')
+count_1 = Label(root, text='批量爬取指定博客所有公开的博客(耐心等待)')
 count_2 = Label(root, text='输入指定随笔url把随笔内容转成md并且保存')
-count_3 = Label(root, text='爬取某个分类下的所有博客')
+count_3 = Label(root, text='爬取某个分类下的所有博客(耐心等待)')
 
 # 功能输入框输入框
 # 存储内容
 entry_1_data = StringVar()
+entry_1_data.set('pythonywy/')
 entry_2_data = StringVar()
+entry_2_data.set('pythonywy/p/10862343.html')
 entry_3_data = StringVar()
+entry_3_data.set('pythonywy/category/1463161.html')
 # 输入框
 entry_1 = Entry(root, state='normal', textvariable=entry_1_data)
 entry_2 = Entry(root, state='normal', textvariable=entry_2_data)
@@ -281,16 +289,26 @@ def b_1_dump(enter=entry_1):
         dump_json(dic, url)
         # 读取字典title和url
         dic = read_dic(url)  # type:dict
+
+
         for name, name_url in dic.items():
+            if url not in name_url:
+                continue
             show_windos(name_url)
-            text = url_to_md_txt(name_url)
+            try:
+                text = url_to_md_txt(name_url)
+            except:
+                show_windos(f'https://www.cnblogs.com/{name_url}html转markdown失败')
             if text:
-                text_to_file(name, text)
+                try:
+                    text_to_file(name, text)
+                except:
+                    show_windos(f'{name}保存本地文件失败')
             else:
                 show_windos(f'{name}随笔转md失败')
         show_windos('全部md转换完成')
     except:
-        show_windos('输入url有误或者没有随笔')
+        show_windos('意外终止!!!')
 
 
 # 记录文章默认名字序号
@@ -363,11 +381,11 @@ msg = '''
 https://www.cnblogs.com/pythonywy/
 你只要输入pythonywy/即可
 功能二输入首页url例如
-https://www.cnblogs.com/pythonywy/p/11123051.html
-你只要输入pythonywy/p/11123051.html即可
+https://www.cnblogs.com/pythonywy/p/10862343.html
+你只要输入pythonywy/p/10862343.html即可
 功能三输入首页url例如
-例如 https://www.cnblogs.com/nickchen121/category/1379216.html
-你只要输入nickchen121/category/1379216.html即可
+例如 https://www.cnblogs.com/pythonywy/category/1463161.html
+你只要输入pythonywy/category/1463161.html即可
 消息展示面板'''
 
 # 提示界面
